@@ -1,0 +1,58 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: eks-springboot-poc
+  labels:
+    app: eks-springboot-poc
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: eks-springboot-poc
+  template:
+    metadata:
+      labels:
+        app: eks-springboot-poc
+    spec:
+      containers:
+      - name: eks-springboot-poc
+        image: XXXXXXXXXXXX.dkr.ecr.us-east-1.amazonaws.com/eks-springboot-poc:v0.0.1
+        ports:
+        - containerPort: 8080
+        env:
+          - name: POSTGRES_DB
+            valueFrom:
+              configMapKeyRef:
+                name: postgres-config
+                key: POSTGRES_DB        
+          - name: POSTGRES_USER
+            valueFrom:
+              configMapKeyRef:
+                name: postgres-config
+                key: POSTGRES_USER
+          - name: POSTGRES_PASSWORD
+            valueFrom:
+              configMapKeyRef:
+                name: postgres-config
+                key: POSTGRES_PASSWORD
+          - name: POSTGRES_HOST
+            valueFrom:
+              configMapKeyRef:
+                name: hostname-config
+                key: postgres_host		
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: eks-springboot-poc
+  labels:
+    app: eks-springboot-poc
+spec:
+  selector:
+    app: eks-springboot-poc
+  ports:
+    - name: http
+      port: 8080
+  type: LoadBalancer 

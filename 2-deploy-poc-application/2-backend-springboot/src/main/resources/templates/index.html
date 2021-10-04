@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<header>
+	<title>EKS POC </title>
+</header>
+<body>
+<H2> Add Contacts<H2>
+	<table>
+		<tr th:if="${value == null}">
+			<div>No value saved</div>
+		</tr>	
+		<tr th:if="${value != null}">
+			<div th:text="${value}"></div>		
+		</tr>	
+	<table>	
+	</br></br>
+	<HR>
+
+	<form method="post" action="/save" class="form-actions">
+		Name: <input type="text" name="name" /> </br>
+		Email: <input type="text" name="email" /> </br>
+		Phone <input type="text" name="phone" /> </br>
+		<input type="submit" value="Save Contact" />
+	</form>
+</body>
+</html>
